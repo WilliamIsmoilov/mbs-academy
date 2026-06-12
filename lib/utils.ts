@@ -1,0 +1,16 @@
+import { enUS, koKR, trTR, ruRU } from '@clerk/localizations'
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+import { uzUZ } from './uz-UZ'
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+export function localization(lng: string) {
+  if (lng === 'en') return enUS
+  if (lng === 'kr') return koKR
+  if (lng === 'tr') return trTR
+  if (lng === 'ru') return ruRU
+  if (lng === 'uz') return uzUZ
+}
