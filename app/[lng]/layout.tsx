@@ -7,7 +7,7 @@ import { ThemeProvider } from '@/components/providers/theme-provider'
 import { languages } from '@/i18n/settings'
 import { dir } from 'i18next'
 import { ClerkProvider } from '@clerk/nextjs'
-import { frFR } from '@clerk/localizations'
+import CookiesProviderWrapper from '@/components/providers/cookie-provider'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -60,7 +60,7 @@ async function RootLayout({ children, params }: Props) {
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <CookiesProviderWrapper>{children}</CookiesProviderWrapper>
           </ThemeProvider>
         </ClerkProvider>
       </body>

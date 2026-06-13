@@ -1,4 +1,7 @@
 'use client'
+
+import { Languages } from 'lucide-react'
+import { Button } from '../ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,40 +9,55 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
-import { Button } from '../ui/button'
-import { Languages } from 'lucide-react'
 import Image from 'next/image'
 import { lngs } from '@/constants'
 import Link from 'next/link'
-import { LngParams } from '@/types/indeex'
-import { cn } from '@/lib/utils'
+import { cn, getCurrentLng } from '@/lib/utils'
 import { useParams } from 'next/navigation'
 
-const LangDropdown = () => {
-  const { item } = useParams()
+interface Props {
+  isMobile?: boolean
+}
+
+function LanguageDropdown({ isMobile = false }: Props) {
+  const { lng } = useParams()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' size={'icon'}>
+        <Button
+          variant='ghost'
+          size={'icon'}
+          className={cn(
+            isMobile && 'w-full bg-primary hover:bg-primary/80 h-12',
+          )}
+        >
           <Languages />
+          {isMobile && (
+            <span className='ml-2 font-space-grotesk font-medium'>
+              {getCurrentLng(lng as string)}
+            </span>
+          )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-52'>
+      <DropdownMenuContent className='w-56'>
         <DropdownMenuGroup>
-          {lngs.map(lng => (
-            <Link href={`/${lng.route}`} key={lng.route}>
+          {lngs.map(item => (
+            <Link key={item.route} href={`/${item.route}`}>
               <DropdownMenuItem
-                className={cn(item === lng.route && 'bg-secondary')}
+                className={cn(
+                  'cursor-pointer',
+                  lng === item.route && 'bg-secondary',
+                )}
               >
                 <Image
-                  src={`/assets/locales/${lng.route}.png`}
-                  alt={lng.label}
+                  src={`/assets/locales/${item.route}.png`}
+                  alt={item.label}
                   width={30}
                   height={30}
-                  className='w-auto'
                 />
-                <span className='ml-2 font-spaceGrotesk font-medium'>
-                  {lng.label}
+                <span className='ml-2 font-space-grotesk font-medium'>
+                  {item.label}
                 </span>
               </DropdownMenuItem>
             </Link>
@@ -50,4 +68,4 @@ const LangDropdown = () => {
   )
 }
 
-export default LangDropdown
+export default LanguageDropdown

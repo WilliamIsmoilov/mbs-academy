@@ -1,8 +1,11 @@
+// components/shared/cookies-provider.tsx
 'use client'
-
-import { ChildProps } from '@/types/indeex'
 import { CookiesProvider } from 'react-cookie'
 
-export default function CookieProviders({ children }: ChildProps) {
+export default function CookiesProviderWrapper({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return <CookiesProvider>{children}</CookiesProvider>
 }
