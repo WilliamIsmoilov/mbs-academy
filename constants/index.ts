@@ -159,19 +159,19 @@ export const instructors = [
   {
     name: 'Chris Impley',
     image:
-      'https://blog.sammi.app/_next/image?url=https%3A%2F%2Fmedia.graphassets.com%2FKmuGvX9oRjYkG3bzttvc&w=1920&q=75',
+      'https://decisionsystemsgroup.github.io/workshop-html/img/john-doe.jpg',
     job: 'Web Developer',
   },
   {
     name: 'Thomas Winter',
     image:
-      'https://blog.sammi.app/_next/image?url=https%3A%2F%2Fmedia.graphassets.com%2FdT22spgATpzG10VG3TSA&w=3840&q=75',
+      'https://medias.artmajeur.com/standard/15867229_thomas-shelby.jpg?v=1738622932',
     job: 'Photographer',
   },
   {
     name: 'Emma Watson',
     image:
-      'https://blog.sammi.app/_next/image?url=https%3A%2F%2Fmedia.graphassets.com%2FmhvJXIm9QuykyIp3bm4Q&w=3840&q=75',
+      'https://static.wikia.nocookie.net/villains/images/2/2b/Cmtspb.jpg/revision/latest/thumbnail/width/360/height/360?cb=20210513195220',
     job: 'Digital Marketer',
   },
   {
