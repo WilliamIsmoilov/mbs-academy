@@ -8,6 +8,7 @@ import { languages } from '@/i18n/settings'
 import { dir } from 'i18next'
 import { ClerkProvider } from '@clerk/nextjs'
 import CookiesProviderWrapper from '@/components/providers/cookie-provider'
+import { Toaster } from '@/components/ui/sonner'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -60,7 +61,9 @@ async function RootLayout({ children, params }: Props) {
             enableSystem
             disableTransitionOnChange
           >
-            <CookiesProviderWrapper>{children}</CookiesProviderWrapper>
+            <CookiesProviderWrapper>
+              {children} <Toaster position='top-center' />
+            </CookiesProviderWrapper>
           </ThemeProvider>
         </ClerkProvider>
       </body>

@@ -3,7 +3,7 @@ import createMiddleware from 'next-intl/middleware'
 import { NextRequest } from 'next/server'
 
 const intlMiddleware = createMiddleware({
-  locales: ['en', 'ru', 'uz', 'tr'],
+  locales: ['en', 'ru', 'uz', 'tr', 'kr'],
   defaultLocale: 'en',
 })
 
@@ -14,7 +14,7 @@ const isPublicRoute = createRouteMatcher([
   '/:lng/courses/:slug',
   '/:lng/blogs',
   '/:lng/blogs/:slug',
-  '/:lng/contacts',
+  '/:lng/contact',
   '/:lng/sign-in',
   '/:lng/sign-up',
 ])
