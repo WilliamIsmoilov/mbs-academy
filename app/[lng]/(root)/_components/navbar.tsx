@@ -13,9 +13,13 @@ import { Show } from '@clerk/nextjs'
 import UserBox from '@/components/shared/user-box'
 import useTranslate from '@/hooks/use-transalte'
 import Mobile from './mobile'
+import { useParams, usePathname } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 const Navbar = () => {
   const t = useTranslate()
+  const pathname = usePathname()
+  const { lng } = useParams()
   return (
     <div className='fixed inset-0 z-40 h-20 bg-background/70 backdrop:blur-xl px-4'>
       <div className='container mx-auto flex h-full max-w-7xl items-center justify-between border-b'>
@@ -26,7 +30,11 @@ const Navbar = () => {
               <Link
                 href={`/${link.route}`}
                 key={link.route}
-                className='font-medium hover:text-blue-500 hover:underline transition-all'
+                className={cn(
+                  'font-medium hover:text-blue-500 hover:underline transition-all',
+
+                  pathname === `/${lng}/${link.route}` && 'text-blue-500',
+                )}
               >
                 {t(link.name)}
               </Link>

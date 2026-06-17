@@ -62,7 +62,7 @@ const Footer = () => {
                   className='text-sm hover:text-blue-500 hover:underline dark:hover:text-blue-300'
                   href='mailto:info@sammi.ac'
                 >
-                  info@illiam.ac
+                  info@william.ac
                 </a>
               </div>
 
