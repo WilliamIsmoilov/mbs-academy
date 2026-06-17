@@ -8,6 +8,7 @@ const intlMiddleware = createMiddleware({
 })
 
 const isPublicRoute = createRouteMatcher([
+  '/',
   '/:lng',
   '/:lng/courses',
   '/:lng/courses/:slug',
