@@ -1,4 +1,5 @@
 'use client'
+// eslint-disable-next-line react-hooks/set-state-in-effect
 
 import { useTranslation } from '@/i18n/client'
 import { useParams } from 'next/navigation'

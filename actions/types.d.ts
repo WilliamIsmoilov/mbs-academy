@@ -10,3 +10,19 @@ export interface ICreateCourse {
   currentPrice: number
   previewImage: string
 }
+
+export interface ICreatedUser {
+  fullName: string
+  clerkId: string
+  email: string
+  picture: string
+}
+
+export interface IUpdateUser {
+  clerkId: string
+  updatedUser: {
+    fullName: string
+    email: string
+    picture: string
+  }
+}
