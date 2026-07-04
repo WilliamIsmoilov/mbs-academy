@@ -29,6 +29,7 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
+    '/((?!(api/vebhook|api/uploadthing)|_next|.*\\..*).*)',
     '/((?!.+\\.[\\w]+$|_next).*)',
     '/',
     '/(api|trpc)(.*)',
