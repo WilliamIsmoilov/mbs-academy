@@ -18,6 +18,7 @@ const isPublicRoute = createRouteMatcher([
   '/:lng/sign-in',
   '/:lng/sign-up',
   '/:lng/api/uploadthing',
+  '/:lng/api/vebhook',
 ])
 
 export default clerkMiddleware(async (auth, req) => {
@@ -29,7 +30,6 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    '/((?!(api/vebhook|api/uploadthing)|_next|.*\\..*).*)',
     '/((?!.+\\.[\\w]+$|_next).*)',
     '/',
     '/(api|trpc)(.*)',

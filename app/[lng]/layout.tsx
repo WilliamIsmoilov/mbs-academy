@@ -31,9 +31,7 @@ export const metadata: Metadata = {
 }
 
 interface Props extends ChildProps {
-  params: {
-    lng: string
-  }
+  params: Promise<{ lng: string }>
 }
 async function RootLayout({ children, params }: Props) {
   const { lng } = await params
