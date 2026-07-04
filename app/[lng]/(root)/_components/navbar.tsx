@@ -8,31 +8,33 @@ import { LogIn, ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
 import GlobalSearch from './global-search'
 import LangDropdown from '@/components/shared/lang-dropdown'
-import { SignInButton, SignUpButton } from '@clerk/nextjs'
-import { Show } from '@clerk/nextjs'
+import { SignInButton, SignUpButton, Show } from '@clerk/nextjs'
 import UserBox from '@/components/shared/user-box'
 import useTranslate from '@/hooks/use-transalte'
 import Mobile from './mobile'
-import { useParams, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 const Navbar = () => {
   const t = useTranslate()
   const pathname = usePathname()
-  const { lng } = useParams()
+
+  const lng = pathname.split('/')[1] || 'en'
+
   return (
-    <div className='fixed inset-0 z-40 h-20 bg-background/70 backdrop:blur-xl px-4'>
+    <div className='fixed inset-0 z-40 h-20 bg-background/70 backdrop-blur-xl px-4'>
       <div className='container mx-auto flex h-full max-w-7xl items-center justify-between border-b'>
+        {/* LEFT */}
         <div className='flex items-center gap-4'>
           <Logo />
-          <div className='md:flex  hidden items-center gap-3 border-l pl-2'>
+
+          <div className='md:flex hidden items-center gap-3 border-l pl-2'>
             {navlinks.map(link => (
               <Link
-                href={`/${link.route}`}
+                href={`/${lng}/${link.route}`}
                 key={link.route}
                 className={cn(
                   'font-medium hover:text-blue-500 hover:underline transition-all',
-
                   pathname === `/${lng}/${link.route}` && 'text-blue-500',
                 )}
               >
@@ -41,28 +43,33 @@ const Navbar = () => {
             ))}
           </div>
         </div>
+
+        {/* RIGHT */}
         <div className='flex items-center gap-2'>
           <div className='flex items-center gap-2 md:border-r md:pr-3'>
             <div className='hidden md:flex'>
               <GlobalSearch />
               <LangDropdown />
-              <Button size={'icon'} variant={'ghost'}>
+
+              <Button size='icon' variant='ghost'>
                 <ShoppingCart />
               </Button>
             </div>
+
             <Mobile />
             <ModeToggle />
           </div>
 
-          <Show when={'signed-in'}>
+          <Show when='signed-in'>
             <UserBox />
           </Show>
-          <Show when={'signed-out'}>
+
+          <Show when='signed-out'>
             <SignInButton mode='modal'>
               <Button
-                size={'lg'}
-                variant={'ghost'}
-                rounded={'full'}
+                size='lg'
+                variant='ghost'
+                rounded='full'
                 className='md:flex hidden'
               >
                 {t('logIn')}
@@ -70,12 +77,13 @@ const Navbar = () => {
             </SignInButton>
 
             <SignUpButton mode='modal'>
-              <Button rounded={'full'} size={'lg'} className='md:flex hidden'>
+              <Button rounded='full' size='lg' className='md:flex hidden'>
                 {t('signUp')}
               </Button>
             </SignUpButton>
+
             <SignInButton mode='modal'>
-              <Button size={'icon'} variant={'ghost'} className='md:hidden'>
+              <Button size='icon' variant='ghost' className='md:hidden'>
                 <LogIn />
               </Button>
             </SignInButton>
