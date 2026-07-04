@@ -5,7 +5,7 @@ import { GrMoney } from 'react-icons/gr'
 import { PiStudent } from 'react-icons/pi'
 import InstructorCourseCard from '@/components/cards/instructor-course'
 import ReviewCard from '@/components/cards/review.card'
-import { getCourses } from '@/actions/course.action'
+
 import { courses } from '@/constants'
 
 const Dashboard = () => {

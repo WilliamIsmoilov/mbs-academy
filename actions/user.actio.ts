@@ -1,4 +1,3 @@
-import { connect } from 'http2'
 import { ICreatedUser, IUpdateUser } from './types'
 import { connectToDatabase } from '@/lib/mongoose'
 import User from '@/database/user.model'
@@ -21,7 +20,7 @@ export async function createUser(user: ICreatedUser) {
     const newUser = await User.create(user)
     return newUser
   } catch (err) {
-    throw new Error('Something went wrong createUser:')
+    throw new Error('Something went wrong createUser:', err as Error)
   }
 }
 
@@ -32,8 +31,8 @@ export async function updatedUser(data: IUpdateUser) {
     const updated = await User.findOneAndUpdate({ clerkId }, updatedUser, {
       new: true,
     })
-    return updatedUser
+    return updated
   } catch (err) {
-    throw new Error('Something went wrong updatedUser:')
+    throw new Error('Something went wrong updatedUser:', err as Error)
   }
 }

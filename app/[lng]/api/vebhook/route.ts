@@ -1,5 +1,5 @@
 import { createUser, updatedUser } from '@/actions/user.actio'
-import { idID } from '@clerk/localizations'
+
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
@@ -37,8 +37,8 @@ export async function POST(req: Request) {
       svix_signature,
       body,
     }) as WebhookEvent
-  } catch (error) {
-    throw new Response('Invalid signature', {
+  } catch (err) {
+    throw new Response('Invalid signature:', {
       status: 401,
     })
   }

@@ -1,5 +1,4 @@
 'use client'
-// eslint-disable-next-line react-hooks/set-state-in-effect
 
 import { useTranslation } from '@/i18n/client'
 import { useParams } from 'next/navigation'
@@ -14,7 +13,6 @@ const useTranslate = () => {
     setMounted(true)
   }, [])
 
-  // mounted bo'lmagan holda key ni qaytaradi — server bilan mos keladi
   if (!mounted) return (key: string) => key
 
   return t

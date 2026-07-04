@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Space_Grotesk, Roboto, Geist } from 'next/font/google'
+import { Space_Grotesk, Roboto } from 'next/font/google'
 import './globals.css'
 import { ChildProps } from '@/types/indeex'
 import { cn, localization } from '@/lib/utils'
@@ -9,8 +9,6 @@ import { dir } from 'i18next'
 import { ClerkProvider } from '@clerk/nextjs'
 import CookiesProviderWrapper from '@/components/providers/cookie-provider'
 import { Toaster } from '@/components/ui/sonner'
-
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 
 const spaceGrotesk = Space_Grotesk({
   variable: '--font-space-grotesk',

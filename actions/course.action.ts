@@ -11,7 +11,7 @@ export const createCourse = async (course: ICreateCourse) => {
     await Course.create(course)
     return true
   } catch (error) {
-    throw new Error('Something went wrong createCourse:')
+    throw new Error('Something went wrong createCourse:', error as Error)
   }
 }
 
@@ -21,6 +21,6 @@ export const getCourses = async () => {
     const courses = await Course.find()
     return courses as ICourse[]
   } catch (error) {
-    throw new Error('Something went wrong getCourse:')
+    throw new Error('Something went wrong getCourse:', error as Error)
   }
 }
