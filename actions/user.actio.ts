@@ -7,6 +7,8 @@ import User from '@/database/user.model'
 export const createUser = async (data: ICreatedUser) => {
   try {
     await connectToDatabase()
+    console.log('connected to db')
+
     const { clerkId, email, fullName, picture } = data
     const isExist = await User.findOne({ clerkId })
 
@@ -16,7 +18,7 @@ export const createUser = async (data: ICreatedUser) => {
         { fullName, picture, clerkId },
         { new: true },
       )
-
+      console.log('passed here')
       return updatedUser
     }
 
@@ -31,10 +33,13 @@ export const createUser = async (data: ICreatedUser) => {
 export const updateUser = async (data: IUpdateUser) => {
   try {
     await connectToDatabase()
+
+    console.log('connected to db')
     const { clerkId, updatedUser } = data
     const updateduser = await User.findOneAndUpdate({ clerkId }, updatedUser, {
       new: true,
     })
+    console.log('passed here')
     return updateduser
   } catch (error) {
     throw new Error('Error updating user. Please try again.')

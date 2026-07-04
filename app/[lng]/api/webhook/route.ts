@@ -56,12 +56,14 @@ export async function POST(req: Request) {
       fullName: `${first_name} ${last_name}`,
       picture: image_url,
     })
-
+    console.log('passed here')
     return NextResponse.json({ message: 'OK', user })
   }
 
   if (eventType === 'user.updated') {
     const { id, email_addresses, image_url, first_name, last_name } = evt.data
+
+    console.log('passed here')
 
     const user = await updateUser({
       clerkId: id,
@@ -71,7 +73,7 @@ export async function POST(req: Request) {
         picture: image_url,
       },
     })
-
+    console.log('passed here')
     return NextResponse.json({ message: 'OK', user })
   }
 }
