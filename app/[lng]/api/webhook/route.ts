@@ -1,24 +1,26 @@
-import { createUser, updatedUser } from '@/actions/user.actio'
-
+/* eslint-disable camelcase */
+import { createUser, updateUser } from '@/actions/user.actio'
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { Webhook } from 'svix'
 
 export async function POST(req: Request) {
-  const hook_secret = process.env.NEXT_CLERK_HOOK_SECRET
+  const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET
 
-  if (!hook_secret) {
-    throw new Error('Missing hook secret')
+  if (!WEBHOOK_SECRET) {
+    throw new Error(
+      'Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local',
+    )
   }
 
   const headerPayload = headers()
-  const svix_id = (await headerPayload).get('svix-id')
-  const svix_timestamp = (await headerPayload).get('svix-timestamp')
-  const svix_signature = (await headerPayload).get('svix-signature')
+  const svixId = (await headerPayload).get('svix-id')
+  const svixTimestamp = (await headerPayload).get('svix-timestamp')
+  const svixSignature = (await headerPayload).get('svix-signature')
 
-  if (!svix_id || !svix_timestamp || !svix_signature) {
-    throw new Response('Missing svix headers', {
+  if (!svixId || !svixTimestamp || !svixSignature) {
+    return new Response('Error occured -- no svix headers', {
       status: 400,
     })
   }
@@ -26,20 +28,20 @@ export async function POST(req: Request) {
   const payload = await req.json()
   const body = JSON.stringify(payload)
 
-  const wh = new Webhook(hook_secret)
+  const wh = new Webhook(WEBHOOK_SECRET)
 
   let evt: WebhookEvent
 
   try {
     evt = wh.verify(body, {
-      svix_id,
-      svix_timestamp,
-      svix_signature,
-      body,
+      'svix-id': svixId,
+      'svix-timestamp': svixTimestamp,
+      'svix-signature': svixSignature,
     }) as WebhookEvent
   } catch (err) {
-    throw new Response('Invalid signature:', {
-      status: 401,
+    console.error('Error verifying webhook:', err)
+    return new Response('Error occured', {
+      status: 400,
     })
   }
 
@@ -47,26 +49,29 @@ export async function POST(req: Request) {
 
   if (eventType === 'user.created') {
     const { id, email_addresses, image_url, first_name, last_name } = evt.data
+
     const user = await createUser({
       clerkId: id,
       email: email_addresses[0].email_address,
       fullName: `${first_name} ${last_name}`,
       picture: image_url,
     })
-    return NextResponse.json({ message: 'User created', user })
+
+    return NextResponse.json({ message: 'OK', user })
   }
 
   if (eventType === 'user.updated') {
     const { id, email_addresses, image_url, first_name, last_name } = evt.data
-    const updateUser = await updatedUser({
+
+    const user = await updateUser({
       clerkId: id,
       updatedUser: {
-        fullName: `${first_name} ${last_name}`,
         email: email_addresses[0].email_address,
+        fullName: `${first_name} ${last_name}`,
         picture: image_url,
       },
     })
 
-    return NextResponse.json({ message: 'User updated', updateUser })
+    return NextResponse.json({ message: 'OK', user })
   }
 }

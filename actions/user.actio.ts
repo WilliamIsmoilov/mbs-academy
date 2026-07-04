@@ -1,12 +1,15 @@
-import { ICreatedUser, IUpdateUser } from './types'
+'use server'
+
 import { connectToDatabase } from '@/lib/mongoose'
+import { ICreatedUser, IUpdateUser } from './types'
 import User from '@/database/user.model'
 
-export async function createUser(user: ICreatedUser) {
+export const createUser = async (data: ICreatedUser) => {
   try {
     await connectToDatabase()
-    const { clerkId, email, fullName, picture } = user
+    const { clerkId, email, fullName, picture } = data
     const isExist = await User.findOne({ clerkId })
+
     if (isExist) {
       const updatedUser = await User.findOneAndUpdate(
         { email },
@@ -17,22 +20,23 @@ export async function createUser(user: ICreatedUser) {
       return updatedUser
     }
 
-    const newUser = await User.create(user)
+    const newUser = User.create(data)
+
     return newUser
-  } catch (err) {
-    throw new Error('Something went wrong createUser:', err as Error)
+  } catch (error) {
+    throw new Error('Error creating user. Please try again.')
   }
 }
 
-export async function updatedUser(data: IUpdateUser) {
+export const updateUser = async (data: IUpdateUser) => {
   try {
     await connectToDatabase()
     const { clerkId, updatedUser } = data
-    const updated = await User.findOneAndUpdate({ clerkId }, updatedUser, {
+    const updateduser = await User.findOneAndUpdate({ clerkId }, updatedUser, {
       new: true,
     })
-    return updated
-  } catch (err) {
-    throw new Error('Something went wrong updatedUser:', err as Error)
+    return updateduser
+  } catch (error) {
+    throw new Error('Error updating user. Please try again.')
   }
 }
