@@ -1,9 +1,12 @@
 import { getCourses } from '@/actions/course.action'
 import Header from '../_components/header'
 import InstructorCourseCard from '@/components/cards/instructor-course'
+import { auth } from '@clerk/nextjs/server'
 
 const CourseIntsructor = async () => {
-  const courses = await getCourses()
+  const { userId } = await auth()
+  const courses = await getCourses(userId as string)
+  console.log(courses)
 
   return (
     <>
