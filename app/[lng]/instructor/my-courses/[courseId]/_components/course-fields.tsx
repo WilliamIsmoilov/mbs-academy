@@ -123,7 +123,7 @@ function Forms({ course, onToggle }: FormProps) {
             </Field>
           )}
         />
-        <Button disabled={isLoading} type='submit'>
+        <Button disabled={isLoading} type='submit' className='self-end'>
           Save
         </Button>
       </form>

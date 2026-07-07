@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { de } from 'zod/v4/locales'
 
 export const contactSchema = z.object({
   message: z.string().min(10),
@@ -21,4 +22,20 @@ export const courseSchema = z.object({
 export const courseFieldSchema = z.object({
   title: z.string().min(3),
   slug: z.string().min(3),
+})
+
+export const descriptionFieldSchema = z.object({
+  description: z.string().min(10),
+})
+
+export const informationFieldSchema = z.object({
+  learning: z.string(),
+  requirements: z.string(),
+  tags: z.string(),
+})
+
+export const selectFieldsSchema = z.object({
+  level: z.string(),
+  language: z.string(),
+  category: z.string(),
 })

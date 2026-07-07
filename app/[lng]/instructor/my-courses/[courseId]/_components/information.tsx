@@ -5,12 +5,11 @@ import { ICourse } from '@/app.types'
 import FillLoading from '@/components/shared/fill-loading'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Field, FieldError } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
+import { Field, FieldLabel } from '@/components/ui/field'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import useToggleEdit from '@/hooks/use-toggle-edit'
-import { descriptionFieldSchema } from '@/lib/validation'
+import { informationFieldSchema } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Edit2, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
@@ -19,13 +18,13 @@ import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
-const Description = (course: ICourse) => {
+const Information = (course: ICourse) => {
   const { onToggle, state } = useToggleEdit()
   return (
     <Card>
       <CardContent className='relative p-6'>
         <div className='flex items-center justify-between'>
-          <span className='text-lg font-medium'>Course Description</span>
+          <span className='text-lg font-medium'>Information</span>
           <Button size={'icon'} variant={'ghost'} onClick={onToggle}>
             {state ? <X /> : <Edit2 />}
           </Button>
@@ -36,13 +35,25 @@ const Description = (course: ICourse) => {
           <Forms course={course} onToggle={onToggle} />
         ) : (
           <div className='flex flex-col space-y-2'>
-            <div className='flex items-center gap-2'>
-              <span className='font-spaceGrotesk font-medium text-muted-foreground self-start'>
-                Description:
-              </span>
-              <span className='line-clamp-3 font-medium'>
-                {course.description}
-              </span>
+            <div className='grid grid-cols-3 gap-2'>
+              <div className='col-span-1 font-space-grotesk font-bold text-muted-foreground'>
+                Requirements:
+              </div>
+              <div className='col-span-2 line-clamp-3'>
+                {course.requirements}
+              </div>
+            </div>
+            <div className='grid grid-cols-3 gap-2'>
+              <div className='col-span-1 font-space-grotesk font-bold text-muted-foreground'>
+                Learning:
+              </div>
+              <div className='col-span-2 line-clamp-3'>{course.learning}</div>
+            </div>
+            <div className='grid grid-cols-3 gap-2'>
+              <div className='col-span-1 font-space-grotesk font-bold text-muted-foreground'>
+                Tags:
+              </div>
+              <div className='col-span-2 line-clamp-3'>{course.tags}</div>
             </div>
           </div>
         )}
@@ -51,7 +62,7 @@ const Description = (course: ICourse) => {
   )
 }
 
-export default Description
+export default Information
 
 interface FormProps {
   course: ICourse
@@ -63,14 +74,16 @@ function Forms({ course, onToggle }: FormProps) {
 
   const pathname = usePathname()
 
-  const form = useForm<z.infer<typeof descriptionFieldSchema>>({
-    resolver: zodResolver(descriptionFieldSchema),
+  const form = useForm<z.infer<typeof informationFieldSchema>>({
+    resolver: zodResolver(informationFieldSchema),
     defaultValues: {
-      description: course.description,
+      learning: course.learning,
+      requirements: course.requirements,
+      tags: course.tags,
     },
   })
 
-  const onSubmit = (data: z.infer<typeof descriptionFieldSchema>) => {
+  const onSubmit = (data: z.infer<typeof informationFieldSchema>) => {
     setIsLoading(true)
     const promise = updateCourse(course._id, data, pathname)
       .then(() => onToggle())
@@ -84,7 +97,6 @@ function Forms({ course, onToggle }: FormProps) {
       error: 'Something went wrong',
     })
   }
-
   return (
     <>
       {isLoading && <FillLoading />}
@@ -94,10 +106,35 @@ function Forms({ course, onToggle }: FormProps) {
       >
         {' '}
         <Controller
-          name='description'
+          name='requirements'
           control={form.control}
           render={({ field }) => (
             <Field>
+              <FieldLabel htmlFor='checkout-7j9-card-name-43j'>
+                Requirements
+              </FieldLabel>
+              <Textarea disabled={isLoading} {...field} />
+            </Field>
+          )}
+        />
+        <Controller
+          name='learning'
+          control={form.control}
+          render={({ field }) => (
+            <Field>
+              <FieldLabel htmlFor='checkout-7j9-card-name-43j'>
+                Learning
+              </FieldLabel>
+              <Textarea disabled={isLoading} {...field} />
+            </Field>
+          )}
+        />
+        <Controller
+          name='tags'
+          control={form.control}
+          render={({ field }) => (
+            <Field>
+              <FieldLabel htmlFor='checkout-7j9-card-name-43j'>Tags</FieldLabel>
               <Textarea disabled={isLoading} {...field} />
             </Field>
           )}
