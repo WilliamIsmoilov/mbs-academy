@@ -54,7 +54,7 @@ const CourseIdPage = async ({
             <LayoutPanelLeft />
           </div>
 
-          <Sections />
+          <Sections course={course} />
 
           <div className='flex items-center gap-2'>
             <span className='font-spaceGrotesk font-medium text-3xl'>

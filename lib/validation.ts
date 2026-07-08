@@ -39,3 +39,11 @@ export const selectFieldsSchema = z.object({
   language: z.string(),
   category: z.string(),
 })
+
+export const priceFieldSchema = z.object({
+  oldPrice: z.string(),
+  currentPrice: z.string(),
+})
+export const sectionFieldSchema = z.object({
+  title: z.string(),
+})
