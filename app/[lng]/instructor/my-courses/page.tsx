@@ -6,7 +6,6 @@ import { auth } from '@clerk/nextjs/server'
 const CourseIntsructor = async () => {
   const { userId } = await auth()
   const courses = await getCourses(userId as string)
-  console.log(courses)
 
   return (
     <>

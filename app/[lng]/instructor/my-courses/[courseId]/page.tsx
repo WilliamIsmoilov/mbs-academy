@@ -11,6 +11,7 @@ import SelectFields from './_components/select-fields'
 import Sections from './_components/sections'
 import Price from './_components/price'
 import PreviewImage from './_components/preview-image'
+import { getSections } from '@/actions/section.action'
 
 const CourseIdPage = async ({
   params,
@@ -19,6 +20,9 @@ const CourseIdPage = async ({
 }) => {
   const { courseId } = await params
   const courseJSON = await getCourseById(courseId)
+  const sectionJSON = await getSections(courseId)
+
+  const sections = JSON.parse(JSON.stringify(sectionJSON))
   const course = JSON.parse(JSON.stringify(courseJSON))
   return (
     <>
@@ -54,7 +58,7 @@ const CourseIdPage = async ({
             <LayoutPanelLeft />
           </div>
 
-          <Sections course={course} />
+          <Sections course={course} sections={sections} />
 
           <div className='flex items-center gap-2'>
             <span className='font-spaceGrotesk font-medium text-3xl'>

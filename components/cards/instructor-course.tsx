@@ -15,6 +15,7 @@ const InstructorCourseCard = ({ course }: Props) => {
           <Image
             src={course.previewImage}
             alt={course.title}
+            sizes=''
             fill
             className='rounded-md object-cover'
           />

@@ -18,7 +18,6 @@ export const createUser = async (data: ICreatedUser) => {
         { fullName, picture, clerkId },
         { new: true },
       )
-      console.log('passed here')
       return updatedUser
     }
 
@@ -39,7 +38,6 @@ export const updateUser = async (data: IUpdateUser) => {
     const updateduser = await User.findOneAndUpdate({ clerkId }, updatedUser, {
       new: true,
     })
-    console.log('passed here')
     return updateduser
   } catch (error) {
     throw new Error('Error updating user. Please try again.')

@@ -39,7 +39,6 @@ function CourseFieldsForm() {
   })
 
   function onSubmit(values: z.infer<typeof courseSchema>) {
-    console.log(previewImage)
     if (!previewImage) {
       toast.error('Please upload a preview image')
       return
