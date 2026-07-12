@@ -4,6 +4,7 @@ import Section from '@/database/section.modal'
 import { connectToDatabase } from '@/lib/mongoose'
 import { revalidatePath } from 'next/cache'
 import { IUpdateSection } from './types'
+import { ISection } from '@/app.types'
 
 export const createSelection = async (
   course: string,
@@ -30,6 +31,15 @@ export const getSections = async (course: string) => {
   }
 }
 
+export const getSectionById = async (id: string) => {
+  try {
+    await connectToDatabase()
+    return await Section.findById(id)
+  } catch (error) {
+    throw new Error('Something went wrong!')
+  }
+}
+
 export const updateSection = async (params: IUpdateSection) => {
   try {
     await connectToDatabase()
@@ -40,5 +50,15 @@ export const updateSection = async (params: IUpdateSection) => {
     revalidatePath(path)
   } catch (error) {
     throw new Error('Something went wrong!')
+  }
+}
+
+export const deleteSectionById = async (id: string, path: string) => {
+  try {
+    await connectToDatabase()
+    await Section.findByIdAndDelete(id)
+    revalidatePath(path)
+  } catch (err) {
+    throw new Error('Something went wrong deleteSectionById:', err as Error)
   }
 }

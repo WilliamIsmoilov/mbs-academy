@@ -25,7 +25,7 @@ const Price = (course: ICourse) => {
     <Card>
       <CardContent className='relative p-6'>
         <div className='flex items-center justify-between'>
-          <span className='text-lg font-medium'>Course Title</span>
+          <span className='text-lg font-medium'>Change Price</span>
           <Button size={'icon'} variant={'ghost'} onClick={onToggle}>
             {state ? <X /> : <Edit2 />}
           </Button>

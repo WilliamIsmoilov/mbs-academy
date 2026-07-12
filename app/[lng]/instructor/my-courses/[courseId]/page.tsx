@@ -49,6 +49,7 @@ const CourseIdPage = async ({
           <Description {...course} />
           <Information {...course} />
           <SelectFields {...course} />
+          <Price {...course} />
         </div>
         <div className='flex flex-col space-y-2'>
           <div className='flex items-center gap-2'>
@@ -59,14 +60,6 @@ const CourseIdPage = async ({
           </div>
 
           <Sections course={course} sections={sections} />
-
-          <div className='flex items-center gap-2'>
-            <span className='font-spaceGrotesk font-medium text-3xl'>
-              Price
-            </span>
-            <Gem />
-          </div>
-          <Price {...course} />
 
           <div className='flex items-center gap-2'>
             <span className='font-spaceGrotesk font-medium text-3xl'>
