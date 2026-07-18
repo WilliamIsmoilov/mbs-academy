@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { ChevronLeft, MoveLeft, Settings, Settings2 } from 'lucide-react'
 import Link from 'next/link'
 import Action from './_components/action'
+import SectionField from './_components/section-field'
+import Lessons from './_components/lessons'
 
 const Page = async ({
   params,
@@ -45,6 +47,7 @@ const Page = async ({
             </span>
             <Settings2 />
           </div>
+          <Lessons section={sections} />
         </div>
 
         <div className='flex flex-col space-y-2'>
@@ -54,6 +57,7 @@ const Page = async ({
             </span>
             <Settings />
           </div>
+          <SectionField {...sections} />
         </div>
       </div>
     </>

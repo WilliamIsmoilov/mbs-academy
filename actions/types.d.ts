@@ -31,3 +31,18 @@ export interface IUpdateSection {
   lists: { _id: string; position: number }[]
   path: string
 }
+
+export interface ILessonField {
+  title: string
+  content: string
+  videoUrl: string
+  hours: string
+  minutes: string
+  seconds: string
+}
+
+export interface ICreateLesson {
+  lesson: ILessonField
+  section: string
+  path: string
+}

@@ -1,3 +1,4 @@
+import { title } from 'process'
 import { z } from 'zod'
 import { de } from 'zod/v4/locales'
 
@@ -46,4 +47,13 @@ export const priceFieldSchema = z.object({
 })
 export const sectionFieldSchema = z.object({
   title: z.string(),
+})
+
+export const lessonFieldSchema = z.object({
+  title: z.string().min(3),
+  content: z.string(),
+  videoUrl: z.url(),
+  hours: z.string(),
+  minutes: z.string(),
+  seconds: z.string(),
 })
