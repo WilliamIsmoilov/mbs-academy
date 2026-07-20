@@ -1,7 +1,7 @@
 'use client'
 
 import { ILessonField } from '@/actions/types'
-import { ISection } from '@/app.types'
+import { ILesson, ISection } from '@/app.types'
 import FillLoading from '@/components/shared/fill-loading'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -19,22 +19,26 @@ import { Field, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { createLesson } from '@/actions/lesson.action'
+import { DragDropContext, Droppable } from '@hello-pangea/dnd'
+import LessonList from './lesson-list'
 
 interface Props {
-  section: ISection
+  sections: ISection
+  lessons: ILesson[]
 }
-const Lessons = ({ section }: Props) => {
+const Lessons = ({ sections, lessons }: Props) => {
   const { state, onToggle } = useToggleEdit()
   const [isLoading, setIsLoading] = useState(false)
   const path = usePathname()
-  const lesson: any[] = []
 
   const onAdd = async (lesson: ILessonField) => {
     setIsLoading(true)
-    return createLesson({ lesson, section: section._id, path })
+    return createLesson({ lesson, section: sections._id, path })
       .then(() => onToggle())
       .finally(() => setIsLoading(false))
   }
+
+  const onDragEnd = () => {}
 
   return (
     <Card>
@@ -49,19 +53,28 @@ const Lessons = ({ section }: Props) => {
         <Separator className='my-3' />
 
         {state ? (
-          <Forms
-            lesson={{} as ILessonField}
-            handler={onAdd}
-            section={section}
-          />
+          <Forms lesson={{} as ILessonField} handler={onAdd} />
         ) : (
           <>
-            {!lesson.length ? (
-              <p className='mt-2 text-sm text-muted-foreground'>
-                No chapters have been added yet.
-              </p>
+            {!lessons.length ? (
+              <p className='text-muted-foreground'>No lessons</p>
             ) : (
-              <p>Lessons</p>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId='lessons'>
+                  {provided => (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      {lessons.map((lesson, index) => (
+                        <LessonList
+                          key={lesson._id}
+                          lesson={lesson}
+                          index={index}
+                        />
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             )}
           </>
         )}
@@ -72,11 +85,11 @@ const Lessons = ({ section }: Props) => {
 
 export default Lessons
 
-interface Props {
+interface FormProps {
   lesson: ILessonField
   handler: (lesson: ILessonField) => Promise<void>
 }
-function Forms({ handler, lesson }: Props) {
+function Forms({ handler, lesson }: FormProps) {
   const { title, content, videoUrl, hours, minutes, seconds } = lesson
 
   const [isLoading, setIsLoading] = useState(false)
@@ -86,7 +99,7 @@ function Forms({ handler, lesson }: Props) {
   const form = useForm<z.infer<typeof lessonFieldSchema>>({
     resolver: zodResolver(lessonFieldSchema),
     defaultValues: {
-      title,
+      title: title ?? '',
       content,
       videoUrl,
       hours: `${hours}`,

@@ -5,6 +5,7 @@ import { connectToDatabase } from '@/lib/mongoose'
 import { revalidatePath } from 'next/cache'
 import { IUpdateSection } from './types'
 import { ISection } from '@/app.types'
+import Lesson from '@/database/lesson.model'
 
 export const createSelection = async (
   course: string,
@@ -57,6 +58,7 @@ export const deleteSectionById = async (id: string, path: string) => {
   try {
     await connectToDatabase()
     await Section.findByIdAndDelete(id)
+    await Lesson.deleteMany({ section: id })
     revalidatePath(path)
   } catch (err) {
     throw new Error('Something went wrong deleteSectionById:', err as Error)

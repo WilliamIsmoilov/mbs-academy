@@ -32,3 +32,26 @@ export const createLesson = async (params: ICreateLesson) => {
     throw new Error('Something went wrong!')
   }
 }
+
+export const getLessons = async (section: string) => {
+  try {
+    await connectToDatabase()
+    return await Lesson.find({ section }).sort({ position: 1 })
+  } catch (error) {
+    throw new Error('Something went wrong!')
+  }
+}
+
+export const deleteLessonById = async (id: string, path: string) => {
+  try {
+    await connectToDatabase()
+    const lesson = await Lesson.findById(id)
+    const section = await Section.findById(lesson.section)
+    section.lessons.pull(id)
+    section.save()
+    await Lesson.findByIdAndDelete(id)
+    revalidatePath(path)
+  } catch (error) {
+    throw new Error('Something went wrong!')
+  }
+}
