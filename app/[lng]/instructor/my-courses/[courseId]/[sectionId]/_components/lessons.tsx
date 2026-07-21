@@ -27,6 +27,7 @@ import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd'
 import LessonList from './lesson-list'
 import { Editor } from '@tinymce/tinymce-react'
 import { editorConfig } from '@/constants'
+import { Checkbox } from '@/components/ui/checkbox'
 
 interface Props {
   sections: ISection
@@ -58,6 +59,7 @@ const Lessons = ({ sections, lessons }: Props) => {
       hours: `${lesson.duration.hours}`,
       minutes: `${lesson.duration.minutes}`,
       seconds: `${lesson.duration.seconds}`,
+      free: lesson.free,
     })
   }
   const onFinishEdit = () => {
@@ -167,7 +169,7 @@ interface FormProps {
   onClose?: () => void
 }
 function Forms({ handler, lesson, isEdit = false, onClose }: FormProps) {
-  const { title, content, videoUrl, hours, minutes, seconds } = lesson
+  const { title, content, videoUrl, hours, minutes, seconds, free } = lesson
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -182,11 +184,12 @@ function Forms({ handler, lesson, isEdit = false, onClose }: FormProps) {
       hours: `${hours}`,
       minutes: `${minutes}`,
       seconds: `${seconds}`,
+      free,
     },
   })
 
   const onSubmit = (data: z.infer<typeof lessonFieldSchema>) => {
-    const promise = handler(data).finally(() => form.reset())
+    const promise = handler(data as ILessonField).finally(() => form.reset())
 
     toast.promise(promise, {
       loading: 'Loading...',
@@ -308,6 +311,24 @@ function Forms({ handler, lesson, isEdit = false, onClose }: FormProps) {
             )}
           />
         </div>
+
+        <Controller
+          name='free'
+          control={form.control}
+          render={({ field }) => (
+            <Field>
+              <div className='flex items-center space-x-2'>
+                <Checkbox
+                  onCheckedChange={field.onChange}
+                  checked={field.value}
+                />
+                <label className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Are you offering this lesson for free?
+                </label>
+              </div>
+            </Field>
+          )}
+        />
 
         <div className='flex items-center gap-2'>
           <Button disabled={isLoading} type='submit' className='px-4 h-10'>

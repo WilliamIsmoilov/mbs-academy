@@ -33,4 +33,5 @@ export interface ILesson {
     minutes: number
     seconds: number
   }
+  free: boolean
 }
