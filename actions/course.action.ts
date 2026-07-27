@@ -2,7 +2,7 @@
 
 import Course from '@/database/course.model'
 import { connectToDatabase } from '@/lib/mongoose'
-import { ICreateCourse } from './types'
+import { GetCourseParams, ICreateCourse } from './types'
 import { ICourse } from '@/app.types'
 import { revalidatePath } from 'next/cache'
 import User from '@/database/user.model'
@@ -18,9 +18,10 @@ export const createCourse = async (course: ICreateCourse, clerkId: string) => {
   }
 }
 
-export const getCourses = async (clerkId: string) => {
+export const getCourses = async (params: GetCourseParams) => {
   try {
     await connectToDatabase()
+    const { clerkId, page = 1, pageSize = 4 } = params
     const user = await User.findOne({ clerkId })
     const courses = await Course.find({ instructor: user._id })
     return courses as ICourse[]
