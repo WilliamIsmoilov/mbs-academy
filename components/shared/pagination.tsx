@@ -8,11 +8,9 @@ interface Props {
   pageNumber: number
   isNext: boolean
 }
-
-const Pagination = ({ pageNumber, isNext }: Props) => {
+function Pagination({ isNext, pageNumber }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  if (!isNext && pageNumber === 1) return null
 
   const onNavigate = (direction: 'prev' | 'next') => {
     const nextPageNumber =
@@ -27,11 +25,27 @@ const Pagination = ({ pageNumber, isNext }: Props) => {
     router.push(newUrl)
   }
 
+  if (!isNext && pageNumber === 1) return null
+
   return (
-    <div className='flex w-full justify-center items-center gap-2'>
-      <Button onClick={() => onNavigate('prev')}>rev</Button>
-      <div className='flex items-center justify-center'>{pageNumber}</div>
-      <Button onClick={() => onNavigate('prev')}>Next</Button>
+    <div className='flex w-full items-center justify-center gap-2'>
+      <Button
+        onClick={() => onNavigate('prev')}
+        disabled={pageNumber === 1}
+        className='flex min-h-[36px] items-center justify-center gap-2 border'
+      >
+        Prev
+      </Button>
+      <div className='flex items-center justify-center rounded-md px-3.5 py-2 font-space-grotesk'>
+        {pageNumber}
+      </div>
+      <Button
+        onClick={() => onNavigate('next')}
+        disabled={!isNext}
+        className='flex min-h-[36px] items-center justify-center gap-2 border'
+      >
+        Next
+      </Button>
     </div>
   )
 }

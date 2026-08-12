@@ -35,3 +35,7 @@ export interface ILesson {
   }
   free: boolean
 }
+
+export interface SearchParamsProps {
+  searchParams: Promise<{ [key: string]: string | undefined }>
+}
