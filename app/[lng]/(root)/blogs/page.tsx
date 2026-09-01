@@ -1,7 +1,6 @@
 import BlogCard from '@/components/cards/blog-card'
 import TopBar from '@/components/shared/top-bar'
 import { getBlogs } from '@/service/blogs.service'
-import React from 'react'
 
 const BlogsPage = async () => {
   const blogs = await getBlogs()

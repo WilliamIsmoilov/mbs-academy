@@ -39,3 +39,19 @@ export interface ILesson {
 export interface SearchParamsProps {
   searchParams: Promise<{ [key: string]: string | undefined }>
 }
+
+export interface IUser {
+  _id: string
+  clerkId: string
+  fullName: string
+  email: string
+  picture: string
+  role: string
+  bio: string
+  phone: string
+  job: string
+  website: string
+  linkedin: string
+  github: string
+  youtube: string
+}

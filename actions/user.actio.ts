@@ -3,6 +3,7 @@
 import { connectToDatabase } from '@/lib/mongoose'
 import { ICreatedUser, IUpdateUser } from './types'
 import User from '@/database/user.model'
+import { revalidatePath } from 'next/cache'
 
 export const createUser = async (data: ICreatedUser) => {
   try {
@@ -34,12 +35,22 @@ export const updateUser = async (data: IUpdateUser) => {
     await connectToDatabase()
 
     console.log('connected to db')
-    const { clerkId, updatedUser } = data
-    const updateduser = await User.findOneAndUpdate({ clerkId }, updatedUser, {
-      new: true,
-    })
+    const { clerkId, updatedUser, path } = data
+    const updateduser = await User.findOneAndUpdate({ clerkId }, updatedUser)
+    if (path) {
+      return revalidatePath(path)
+    }
     return updateduser
   } catch (error) {
     throw new Error('Error updating user. Please try again.')
+  }
+}
+
+export const getUserById = async (clerkId: string) => {
+  try {
+    await connectToDatabase()
+    return await User.findOne({ clerkId })
+  } catch (error) {
+    throw new Error('Error getting user. Please try again.')
   }
 }
