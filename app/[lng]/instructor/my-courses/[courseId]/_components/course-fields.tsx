@@ -65,8 +65,8 @@ function Forms({ course, onToggle }: FormProps) {
   const form = useForm<z.infer<typeof courseFieldSchema>>({
     resolver: zodResolver(courseFieldSchema),
     defaultValues: {
-      title: course.title,
-      slug: course.slug,
+      title: course.title ?? '',
+      slug: course.slug ?? '',
     },
   })
 

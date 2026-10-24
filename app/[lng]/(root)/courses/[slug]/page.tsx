@@ -1,5 +1,4 @@
 import TopBar from '@/components/shared/top-bar'
-import React from 'react'
 import Hero from './_components/hero'
 import Overview from './_components/overview'
 import Description from './_components/description'
@@ -12,12 +11,19 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import CourseCard from '@/components/cards/course.card'
-import { courses } from '@/constants'
 import { translation } from '@/i18n/server'
+import { ICourse } from '@/app.types'
+import { getDetailedCourse } from '@/actions/course.action'
 
-const Page = async ({ params }: { params: Promise<{ lng: string }> }) => {
-  const { lng } = await params
+interface Props {
+  params: Promise<{ lng: string; slug: string }>
+}
+
+const Page = async ({ params }: Props) => {
+  const { lng, slug } = await params
   const { t } = await translation(lng)
+  const courseJSON = await getDetailedCourse(slug)
+  const course = JSON.parse(JSON.stringify(courseJSON))
   return (
     <>
       <TopBar label='allCourses' extra='Full Courses ReactJS' />
@@ -25,11 +31,11 @@ const Page = async ({ params }: { params: Promise<{ lng: string }> }) => {
       <div className='container mx-auto max-w-6xl max-md:px-4'>
         <div className='grid grid-cols-3 gap-4 pt-12'>
           <div className='col-span-2 max-lg:col-span-3'>
-            <Hero />
-            <Overview />
+            <Hero {...course} />
+            <Overview {...course} />
           </div>
           <div className='col-span-1 max-lg:col-span-3'>
-            <Description />
+            <Description {...course} />
           </div>
         </div>
 
@@ -41,14 +47,14 @@ const Page = async ({ params }: { params: Promise<{ lng: string }> }) => {
 
         <Carousel opts={{ align: 'start' }} className='mt-6 w-full'>
           <CarouselContent className='w-full'>
-            {courses.map(course => (
+            {/* {courses.map(course => (
               <CarouselItem
                 key={course.title}
                 className='md:basis-1/2 lg:basis-1/3'
               >
                 <CourseCard {...course} />
               </CarouselItem>
-            ))}
+            ))} */}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />

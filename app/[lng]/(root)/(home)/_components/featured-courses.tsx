@@ -1,5 +1,6 @@
 'use client'
 
+import { ICourse } from '@/app.types'
 import CourseCard from '@/components/cards/course.card'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,12 +10,16 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import { courses, filterCourses } from '@/constants'
+import { filterCourses } from '@/constants'
 import useTranslate from '@/hooks/use-transalte'
 import { cn } from '@/lib/utils'
 import React, { useState } from 'react'
 
-const FeaturedCourses = () => {
+interface Props {
+  courses: ICourse[]
+}
+
+const FeaturedCourses = ({ courses }: Props) => {
   const [filter, setFilter] = useState('all')
   const t = useTranslate()
   return (

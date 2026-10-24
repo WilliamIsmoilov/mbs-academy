@@ -60,11 +60,11 @@ const AllCourses = () => {
           </Select>
         </div>
       </div>
-      <div className='mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+      {/* <div className='mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
         {courses.map((item, index) => (
           <CourseCard key={index} {...item} />
         ))}
-      </div>
+      </div> */}
     </div>
   )
 }

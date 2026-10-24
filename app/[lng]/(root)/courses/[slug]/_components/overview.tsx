@@ -1,5 +1,6 @@
 'use client'
 
+import { ICourse } from '@/app.types'
 import ReviewCard from '@/components/cards/review.card'
 import {
   Accordion,
@@ -19,7 +20,7 @@ import {
   Star,
 } from 'lucide-react'
 
-const Overview = () => {
+const Overview = (course: ICourse) => {
   const t = useTranslate()
   return (
     <>
@@ -29,7 +30,7 @@ const Overview = () => {
         </h2>
 
         <div className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2'>
-          {learn.split(', ').map(item => (
+          {course.learning.split(', ').map(item => (
             <div className='flex gap-2' key={item}>
               <BadgeCheck className='size-5 text-blue-500' />
               <p className='flex-1'>{item}</p>
@@ -49,7 +50,7 @@ const Overview = () => {
             <p className='font-spaceGrotesk text-xl font-bold'>
               {t('numberOfModules')}
             </p>
-            <div className='text-2xl font-medium'>4</div>
+            <div className='text-2xl font-medium'>20</div>
           </div>
 
           <div className='flex flex-col'>
@@ -85,11 +86,11 @@ const Overview = () => {
 
       <div className='mt-8 rounded-md bg-secondary p-4 lg:p-6'>
         <h2 className='font-spaceGrotesk text-3xl font-bold'>
-          {t('courseForWhom')}
+          {t('requirements')}
         </h2>
 
         <div className='mt-2'>
-          {forWhom.split(', ').map(i => (
+          {course.requirements.split(', ').map(i => (
             <div className='mt-1 flex items-center' key={i}>
               <Dot />
               <p className='flex-1 text-slate-400'>{i}</p>
@@ -131,7 +132,3 @@ const Overview = () => {
 }
 
 export default Overview
-
-const learn = 'Javascript, AJAX, Algorithm, Promise, Git va Github, Json-Server'
-const forWhom =
-  "Dasturlashga qiziqish borlar, JavaScript dasturlash tilini o'rganish istagi, Amaliy loyihalar qilish"
