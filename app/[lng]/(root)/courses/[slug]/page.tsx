@@ -13,7 +13,7 @@ import {
 import CourseCard from '@/components/cards/course.card'
 import { translation } from '@/i18n/server'
 import { ICourse } from '@/app.types'
-import { getDetailedCourse } from '@/actions/course.action'
+import { getDetailedCourse, getFeaturedCourses } from '@/actions/course.action'
 
 interface Props {
   params: Promise<{ lng: string; slug: string }>
@@ -23,7 +23,9 @@ const Page = async ({ params }: Props) => {
   const { lng, slug } = await params
   const { t } = await translation(lng)
   const courseJSON = await getDetailedCourse(slug)
+  const coursesJSON = await getFeaturedCourses()
   const course = JSON.parse(JSON.stringify(courseJSON))
+  const courses = JSON.parse(JSON.stringify(coursesJSON))
   return (
     <>
       <TopBar label='allCourses' extra='Full Courses ReactJS' />
@@ -47,14 +49,14 @@ const Page = async ({ params }: Props) => {
 
         <Carousel opts={{ align: 'start' }} className='mt-6 w-full'>
           <CarouselContent className='w-full'>
-            {/* {courses.map(course => (
+            {courses.map((course: ICourse) => (
               <CarouselItem
                 key={course.title}
                 className='md:basis-1/2 lg:basis-1/3'
               >
                 <CourseCard {...course} />
               </CarouselItem>
-            ))} */}
+            ))}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />

@@ -1,6 +1,7 @@
 'use client'
 
-import { ICourse } from '@/app.types'
+import { getCourseSections } from '@/actions/section.action'
+import { ICourse, ISection } from '@/app.types'
 import ReviewCard from '@/components/cards/review.card'
 import {
   Accordion,
@@ -19,9 +20,29 @@ import {
   MonitorPlay,
   Star,
 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import SectionList from './section-list'
+import SectionLoading from '@/components/shared/section-loading'
 
 const Overview = (course: ICourse) => {
   const t = useTranslate()
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [sections, setSections] = useState<ISection[]>([])
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await getCourseSections(course._id)
+        setSections(res)
+        setIsLoading(false)
+      } catch (error) {
+        setIsLoading(false)
+      }
+    }
+    getData()
+  }, [])
+
   return (
     <>
       <div className='mt-6 rounded-md bg-gradient-to-t from-background to-secondary p-4 lg:p-6'>
@@ -50,7 +71,7 @@ const Overview = (course: ICourse) => {
             <p className='font-spaceGrotesk text-xl font-bold'>
               {t('numberOfModules')}
             </p>
-            <div className='text-2xl font-medium'>20</div>
+            <div className='text-2xl font-medium'>{course.totalSections}</div>
           </div>
 
           <div className='flex flex-col'>
@@ -58,7 +79,7 @@ const Overview = (course: ICourse) => {
             <p className='font-spaceGrotesk text-xl font-bold'>
               {t('numberOfLessons')}
             </p>
-            <div className='text-2xl font-medium'>90 ta</div>
+            <div className='text-2xl font-medium'>{course.totalLessons}</div>
           </div>
 
           <div className='flex flex-col '>
@@ -67,21 +88,27 @@ const Overview = (course: ICourse) => {
               {t('courseDuration')}
             </p>
             <div className='text-2xl font-medium'>
-              20 {t('hours')} 40 {t('minutes')}
+              {course.totalDuration.split('.')[0]}
+              {course.totalDuration.split('.')[1]} {t('minutes')}
             </div>
           </div>
         </div>
 
         <Separator className='my-3' />
 
-        <Accordion type='single' collapsible defaultValue='item-1'>
-          <AccordionItem value='item-1'>
-            <AccordionTrigger>Is it accessible?</AccordionTrigger>
-            <AccordionContent>
-              Yes. It adheres to the WAI-ARIA design pattern.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        {isLoading ? (
+          <div className='mt-4 flex flex-col  gap-1'>
+            {Array.from({ length: course.totalSections }).map((_, i) => (
+              <SectionLoading key={i} />
+            ))}
+          </div>
+        ) : (
+          <Accordion type='single' collapsible defaultValue='item-1'>
+            {sections.map(section => (
+              <SectionList key={section._id} {...section} />
+            ))}
+          </Accordion>
+        )}
       </div>
 
       <div className='mt-8 rounded-md bg-secondary p-4 lg:p-6'>

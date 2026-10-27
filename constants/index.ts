@@ -58,9 +58,9 @@ export const companies = [
 
 export const filterCourses = [
   { label: 'cateogry1', name: 'all' },
-  { label: 'cateogry2', name: 'trending' },
-  { label: 'cateogry3', name: 'popular' },
-  { label: 'cateogry4', name: 'featured' },
+  { label: 'cateogry2', name: 'newest' },
+  { label: 'cateogry3', name: 'lowest-price' },
+  { label: 'cateogry4', name: 'highest-price' },
 ]
 
 export const filterLevels = [
@@ -252,7 +252,13 @@ export const courseCategory = [
   'desktop',
   'game',
 ]
-export const courseLanguage = ['english', 'uzbek', 'russian', 'turkish']
+export const courseLanguage = [
+  'english',
+  'uzbek',
+  'russian',
+  'turkish',
+  'korean',
+]
 
 export const editorConfig = {
   height: 150,

@@ -59,7 +59,7 @@ const Description = (course: ICourse) => {
           <span className='font-bold'>{t('durations')}</span>
         </div>
         <p className='text-muted-foreground'>
-          {course.totalDuration} {t('hours')}
+          {course.totalDuration} {t('minutes')}
         </p>
       </div>
 
