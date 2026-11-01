@@ -16,6 +16,7 @@ import useTranslate from '@/hooks/use-transalte'
 import { useRouter, useSearchParams } from 'next/navigation'
 import page from '../page'
 import { formQueryUrl } from '@/lib/utils'
+import NoResult from '@/components/shared/no-result'
 
 interface Props {
   result: {
@@ -108,6 +109,13 @@ const AllCourses = ({ result }: Props) => {
           <CourseCard key={index} {...item} />
         ))}
       </div>
+
+      {courses.length === 0 && (
+        <NoResult
+          title='Nothing had found for this search'
+          desc="Find the courses that suit you! 🚀 Currently, we don't have any courses matching your search. They'll be added soon! 💡"
+        />
+      )}
 
       <div className='mt-10'>
         <Pagination isNext={isNext} pageNumber={page ? +page : 1} />

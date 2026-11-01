@@ -12,7 +12,8 @@ import {
 } from '@/components/ui/carousel'
 import { filterCourses } from '@/constants'
 import useTranslate from '@/hooks/use-transalte'
-import { cn } from '@/lib/utils'
+import { cn, formQueryUrl } from '@/lib/utils'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 
 interface Props {
@@ -20,8 +21,24 @@ interface Props {
 }
 
 const FeaturedCourses = ({ courses }: Props) => {
-  const [filter, setFilter] = useState('all')
   const t = useTranslate()
+
+  const searchParams = useSearchParams()
+  const page = searchParams.get('page')
+
+  const router = useRouter()
+
+  const onUpdateParams = (value: string) => {
+    const newUrl = formQueryUrl({
+      value,
+      key: 'filter',
+      params: searchParams.toString(),
+      toCourse: true,
+    })
+
+    router.push(newUrl)
+  }
+
   return (
     <div className='container mx-auto max-w-6xl py-12 max-md:px-4'>
       <div className='flex items-center justify-between max-md:flex-col max-md:items-center'>
@@ -39,12 +56,12 @@ const FeaturedCourses = ({ courses }: Props) => {
             <Button
               key={item.name}
               rounded={'full'}
-              variant={filter === item.name ? 'secondary' : 'ghost'}
+              variant={item.name === 'all' ? 'secondary' : 'ghost'}
               className={cn(
                 'font-medium max-md:bg-secondary px-4 py-5 w-1/4 ',
-                filter === item.name && 'text-primary',
+                item.name === 'all' && 'text-primary',
               )}
-              onClick={() => setFilter(item.name)}
+              onClick={() => onUpdateParams(item.name)}
             >
               {t(item.label)}
             </Button>
