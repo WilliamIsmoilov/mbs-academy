@@ -7,11 +7,11 @@ import { ICourse, ILesson } from '@/app.types'
 import { revalidatePath } from 'next/cache'
 import User from '@/database/user.model'
 import { cache } from 'react'
-import path from 'path'
 import Section from '@/database/section.modal'
 import Lesson from '@/database/lesson.model'
 import { calculateTotalDuration } from '@/lib/utils'
 import { QueryFilter } from 'mongoose'
+import Purchase from '@/database/purchase.model'
 
 export const createCourse = async (course: ICreateCourse, clerkId: string) => {
   try {
@@ -206,5 +206,32 @@ export const getAllCourses = async (params: GetAllCoursesParams) => {
     return { courses, totalCourses, isNext }
   } catch (error) {
     throw new Error('Something went wrong getAllCourses:', error as Error)
+  }
+}
+
+export const purchaseCourse = async (course: string, clerkId: string) => {
+  try {
+    await connectToDatabase()
+    const user = await User.findOne({ clerkId })
+    const checkCourse = await Course.findById(course)
+      .select('purchases')
+      .populate({
+        path: 'purchases',
+        model: Purchase,
+        match: { user: user._id },
+      })
+
+    if (checkCourse.purchases.length > 0)
+      return JSON.parse(JSON.stringify({ status: 200 }))
+
+    const purchase = await Purchase.create({ user: user._id, course })
+
+    await Course.findByIdAndUpdate(course, {
+      $push: { purchases: purchase._id },
+    })
+    return JSON.parse(JSON.stringify({ status: 200 }))
+  } catch (err) {
+    console.log('purchaseCourse ERROR:', err)
+    throw new Error('Something went wrong while purchasing course!')
   }
 }

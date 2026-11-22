@@ -12,9 +12,31 @@ import {
 } from 'lucide-react'
 import { GrCertificate } from 'react-icons/gr'
 import { BiCategory } from 'react-icons/bi'
+import { useState } from 'react'
+import { useAuth } from '@clerk/nextjs'
+import { purchaseCourse } from '@/actions/course.action'
+import { useParams, useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 const Description = (course: ICourse) => {
   const t = useTranslate()
+  const { userId } = useAuth()
+  const router = useRouter()
+  const { lng } = useParams()
+  const [IsLoading, setIsLoading] = useState(false)
+
+  const onPurchase = async () => {
+    setIsLoading(true)
+    const promise = purchaseCourse(course._id, userId!)
+      .then(() => router.push(`/${lng}/dashboard/${course._id}`))
+      .catch(() => setIsLoading(false))
+
+    toast.promise(promise, {
+      loading: t('loading'),
+      success: t('Succesfully'),
+      error: t('error'),
+    })
+  }
   return (
     <div className='rounded-md border bg-secondary/50 p-4 shadow-lg dark:shadow-white/20 lg:sticky lg:top-24 lg:p-6'>
       <div className='flex items-center justify-between font-spaceGrotesk'>
@@ -37,7 +59,12 @@ const Description = (course: ICourse) => {
       <Button size={'lg'} className='mt-4 w-full font-bold'>
         {t('addToCart')}
       </Button>
-      <Button size={'lg'} className='mt-2 w-full font-bold' variant={'outline'}>
+      <Button
+        size={'lg'}
+        className='mt-2 w-full font-bold'
+        variant={'outline'}
+        onClick={onPurchase}
+      >
         {t('buyNow')}
       </Button>
 

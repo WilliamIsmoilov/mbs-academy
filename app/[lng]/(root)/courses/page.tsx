@@ -1,7 +1,8 @@
 import TopBar from '@/components/shared/top-bar'
-import AllCourses from './_components/all-courses'
+
 import { getAllCourses } from '@/actions/course.action'
 import { SearchParamsProps } from '@/app.types'
+import AllCourses from './_components/all-courses'
 
 const page = async ({ searchParams }: SearchParamsProps) => {
   const params = await searchParams
