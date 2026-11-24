@@ -12,6 +12,7 @@ import Lesson from '@/database/lesson.model'
 import { calculateTotalDuration } from '@/lib/utils'
 import { QueryFilter } from 'mongoose'
 import Purchase from '@/database/purchase.model'
+import UserProgress from '@/database/user-progress.model'
 
 export const createCourse = async (course: ICreateCourse, clerkId: string) => {
   try {
@@ -233,5 +234,42 @@ export const purchaseCourse = async (course: string, clerkId: string) => {
   } catch (err) {
     console.log('purchaseCourse ERROR:', err)
     throw new Error('Something went wrong while purchasing course!')
+  }
+}
+
+export const getDashboardCourse = async (clerkId: string, courseId: string) => {
+  try {
+    await connectToDatabase()
+    const course = await Course.findById(courseId).select('title')
+    const sections = await Section.find({ course: courseId })
+      .select('title')
+      .sort({ position: 1 })
+      .populate({
+        path: 'lessons',
+        model: Lesson,
+        select: 'title userProgress',
+        options: { sort: { position: 1 } },
+        populate: {
+          path: 'userProgress',
+          match: { userId: clerkId },
+          model: UserProgress,
+          select: 'lessonId',
+        },
+      })
+
+    const lessons = sections.map(section => section.lessons).flat()
+    const lessonIds = lessons.map(lesson => lesson._id)
+
+    const validCompletedLessons = await UserProgress.find({
+      userId: clerkId,
+      lessonId: { $in: lessonIds },
+      isCompleted: true,
+    })
+
+    const progressPercentage =
+      (validCompletedLessons.length / lessons.length) * 100
+    return { course, sections, progressPercentage }
+  } catch (err) {
+    throw new Error('something went wrong while getting dashboard course!')
   }
 }

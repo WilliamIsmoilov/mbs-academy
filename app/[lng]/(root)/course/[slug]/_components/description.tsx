@@ -17,6 +17,7 @@ import { useAuth } from '@clerk/nextjs'
 import { purchaseCourse } from '@/actions/course.action'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import FillLoading from '@/components/shared/fill-loading'
 
 const Description = (course: ICourse) => {
   const t = useTranslate()
@@ -61,10 +62,12 @@ const Description = (course: ICourse) => {
       </Button>
       <Button
         size={'lg'}
-        className='mt-2 w-full font-bold'
+        className='mt-2 w-full font-bold relative'
         variant={'outline'}
         onClick={onPurchase}
+        disabled={IsLoading}
       >
+        {IsLoading && <FillLoading />}
         {t('buyNow')}
       </Button>
 

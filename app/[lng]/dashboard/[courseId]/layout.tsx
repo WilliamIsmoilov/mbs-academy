@@ -1,7 +1,23 @@
-import React from 'react'
+import { ChildProps } from '@/types/indeex'
+import Navbar from './_components/navbar'
+import Sidebar from './_components/sidebar'
 
-const Layout = () => {
-  return <div>Layout</div>
+interface Props extends ChildProps {
+  params: Promise<{ lng: string; courseId: string }>
+}
+const Layout = async ({ params, children }: Props) => {
+  const { courseId, lng } = await params
+  return (
+    <div className='relative'>
+      <Navbar />
+      <div className='flex'>
+        <Sidebar courseId={courseId} lng={lng} />
+        <section className=' flex min-h-screen flex-1 flex-col px-4 pb-6 pt-24 max-md:pb-14 sm:px-14'>
+          <div className='mx-auto w-full max-w-5xl'>{children}</div>
+        </section>
+      </div>
+    </div>
+  )
 }
 
 export default Layout

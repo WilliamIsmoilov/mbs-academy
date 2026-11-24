@@ -85,5 +85,17 @@
   "numberOfModules": "모듈",
   "numberOfLessons": "강의 수",
   "courseDuration": "강좌 시간",
-  "youMayLike": "추천 상품"
+  "youMayLike": "추천 상품",
+  "category": "카테고리",
+  "requirements": "요구 사항",
+  "loadMore": "더 보기",
+  "completed": "완료됨",
+  "evaluation": "평가",
+  "favouriteCourse": "이 강의를 즐겨찾기에 추가",
+  "archiveCourse": "이 강의를 보관",
+  "share": "친구에게 공유하기",
+  "shareCourse": "이 플랫폼을 응원하는 의견을 남겨 주시고 친구들에게도 공유해 주세요",
+  "completeLesson": "이 레슨 완료하기",
+  "usefullInformation": "유용한 정보",
+  "typeToSearch": "검색어를 입력하세요..."
 }
