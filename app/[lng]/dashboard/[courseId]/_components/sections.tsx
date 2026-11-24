@@ -5,7 +5,7 @@ interface Props {
   sections: ISection[]
 }
 const Sections = ({ sections }: Props) => {
-  return <div>Sections</div>
+  return <div>Sectiojklnfk wjkfnwkjonf wfnonwvg eneonv evoenione bvns</div>
 }
 
 export default Sections
