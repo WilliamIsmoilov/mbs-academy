@@ -23,12 +23,12 @@ const Sidebar = async ({ courseId, lng }: Props) => {
         <h1 className='line-clamp-1 text-xl font-medium'>{course.title}</h1>
         <Progress value={progressPercentage} className='h-4' />
         <p className=' text-sm'>
-          {progressPercentage}% {t('completed')}
+          {progressPercentage.toFixed(0)}% {t('completed')}
         </p>
       </div>
 
       <div className='mt-4'>
-        <Sections sections={sections} />
+        <Sections sections={JSON.parse(JSON.stringify(sections))} />
       </div>
     </div>
   )

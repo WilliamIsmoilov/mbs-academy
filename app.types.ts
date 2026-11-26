@@ -40,6 +40,13 @@ export interface ILesson {
     seconds: number
   }
   free: boolean
+  userProgress: IUserProgress[]
+}
+
+export interface IUserProgress {
+  userId: string
+  lessonId: string
+  isCompleted: boolean
 }
 
 export interface SearchParamsProps {

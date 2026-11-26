@@ -273,3 +273,42 @@ export const getDashboardCourse = async (clerkId: string, courseId: string) => {
     throw new Error('something went wrong while getting dashboard course!')
   }
 }
+
+export const completeLesson = async (
+  lessonId: string,
+  userId: string,
+  path: string,
+) => {
+  try {
+    await connectToDatabase()
+    const userProgress = await UserProgress.findOne({ userId, lessonId })
+    if (userProgress) {
+      userProgress.isCompleted = true
+      await userProgress.save()
+    } else {
+      const newUserProgress = new UserProgress({
+        userId,
+        lessonId,
+        isCompleted: true,
+      })
+
+      const lesson = await Lesson.findById(lessonId)
+      lesson.userProgress.push(newUserProgress._id)
+      await lesson.save()
+      await newUserProgress.save()
+    }
+    revalidatePath(path)
+  } catch (err) {
+    throw new Error('Something wenty wrong', err as Error)
+  }
+}
+
+export const unCompleteLesson = async (lessonId: string, path: string) => {
+  try {
+    await connectToDatabase()
+    await UserProgress.findOneAndDelete({ lessonId })
+    revalidatePath(path)
+  } catch (err) {
+    throw new Error('Something wnet wrong', err as Error)
+  }
+}
