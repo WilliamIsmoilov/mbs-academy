@@ -1,7 +1,33 @@
-import React from 'react'
+import { getLesson } from '@/actions/lesson.action'
+import { translation } from '@/i18n/server'
+import parse from 'html-react-parser'
 
-const Page = () => {
-  return <div></div>
+interface Props {
+  params: Promise<{ lessonId: string; courseId: string; lng: string }>
+}
+
+const Page = async ({ params }: Props) => {
+  const { lessonId, courseId, lng } = await params
+  const { t } = await translation(lng)
+  const lesson = await getLesson(lessonId)
+  return (
+    <>
+      {/* <VideoPlayerYoutube url={lesson.videoUrl} /> */}
+      {lesson.content && (
+        <div className='rounded-md bg-gradient-to-b from-background to-secondary px-4 pb-4 pt-1 md:px-8'>
+          <h1 className='mb-2 font-spaceGrotesk text-xl font-medium text-primary'>
+            {t('usefullInformation')}
+          </h1>
+          <div className='prose max-w-none flex-1 dark:prose-invert'>
+            {parse(lesson.content)}
+          </div>
+        </div>
+      )}
+      {/* <div className='block lg:hidden'>
+        <MobileCurriculum courseId={courseId} lng={lng} />
+      </div> */}
+    </>
+  )
 }
 
 export default Page

@@ -87,3 +87,12 @@ export const editLessonPosition = async (params: IUpdatePosition) => {
     throw new Error('Something went wrong!')
   }
 }
+
+export const getLesson = async (id: string) => {
+  try {
+    await connectToDatabase()
+    return await Lesson.findById(id).select('title content videoUrl ')
+  } catch (error) {
+    throw new Error('Something went wrong', error as Error)
+  }
+}
