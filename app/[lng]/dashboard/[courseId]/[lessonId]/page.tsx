@@ -1,6 +1,8 @@
 import { getLesson } from '@/actions/lesson.action'
 import { translation } from '@/i18n/server'
 import parse from 'html-react-parser'
+import VideoLesson from './_components/video-lesson'
+import MobileCurriculum from './_components/mobile-curriculum'
 
 interface Props {
   params: Promise<{ lessonId: string; courseId: string; lng: string }>
@@ -13,6 +15,7 @@ const Page = async ({ params }: Props) => {
   return (
     <>
       {/* <VideoPlayerYoutube url={lesson.videoUrl} /> */}
+      <VideoLesson lesson={JSON.parse(JSON.stringify(lesson))} />
       {lesson.content && (
         <div className='rounded-md bg-gradient-to-b from-background to-secondary px-4 pb-4 pt-1 md:px-8'>
           <h1 className='mb-2 font-spaceGrotesk text-xl font-medium text-primary'>
@@ -23,9 +26,9 @@ const Page = async ({ params }: Props) => {
           </div>
         </div>
       )}
-      {/* <div className='block lg:hidden'>
+      <div className='block lg:hidden'>
         <MobileCurriculum courseId={courseId} lng={lng} />
-      </div> */}
+      </div>
     </>
   )
 }

@@ -49,7 +49,7 @@ async function RootLayout({ children, params }: Props) {
         spaceGrotesk.variable,
       )}
     >
-      <body className='min-h-full flex flex-col'>
+      <body className='min-h-full flex flex-col custom-scrollbar'>
         <ClerkProvider localization={local}>
           <ThemeProvider
             attribute='class'

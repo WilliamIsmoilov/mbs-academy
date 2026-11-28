@@ -1,7 +1,8 @@
+import DashboardLoading from '@/components/shared/dashboard-loading'
 import React from 'react'
 
 const Loading = () => {
-  return <div></div>
+  return <DashboardLoading />
 }
 
 export default Loading

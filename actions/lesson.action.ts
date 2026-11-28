@@ -5,6 +5,8 @@ import { ICreateLesson, ILessonField, IUpdatePosition } from './types'
 import Section from '@/database/section.modal'
 import Lesson from '@/database/lesson.model'
 import { revalidatePath } from 'next/cache'
+import { ILesson } from '@/app.types'
+import UserProgress from '@/database/user-progress.model'
 
 export const createLesson = async (params: ICreateLesson) => {
   try {
@@ -94,5 +96,79 @@ export const getLesson = async (id: string) => {
     return await Lesson.findById(id).select('title content videoUrl ')
   } catch (error) {
     throw new Error('Something went wrong', error as Error)
+  }
+}
+
+export const getNextLesson = async (lessonId: string, courseId: string) => {
+  try {
+    await connectToDatabase()
+    const sections = await Section.find({ course: courseId }).populate({
+      path: 'lessons',
+      options: { sort: { position: 1 } },
+      model: Lesson,
+    })
+
+    const lesson: ILesson[] = sections.map(section => section.lessons).flat()
+
+    const lessonIndex = lesson.findIndex(
+      item => item._id.toString() === lessonId,
+    )
+
+    if (lessonIndex === lesson.length - 1) {
+      return null
+    }
+
+    const nextLesson = lesson[lessonIndex + 1]
+
+    const section = await Section.findOne({ lessons: nextLesson._id })
+
+    return {
+      lessonId: nextLesson._id.toString(),
+      sectionId: section._id.toString(),
+    }
+  } catch (err) {
+    throw new Error('Something went wrong in getnextLesson', err as Error)
+  }
+}
+
+export const getLastLesson = async (clerkId: string, courseId: string) => {
+  try {
+    await connectToDatabase()
+    const sections = await Section.find({ course: courseId })
+      .sort({
+        position: 1,
+      })
+      .populate({
+        path: 'lessons',
+        model: Lesson,
+        select: 'userProgress',
+        options: { sort: { position: 1 } },
+      })
+
+    const lessons: ILesson[] = sections.map(section => section.lessons).flat()
+
+    const userProgress = await UserProgress.find({
+      userId: clerkId,
+      lessonId: { $in: lessons.map(lesson => lesson._id) },
+      isCompleted: true,
+    }).sort({ createdAt: -1 })
+
+    const lastLesson = userProgress[userProgress.length - 1]
+
+    if (!lastLesson) {
+      return {
+        sectionId: sections[0]._id,
+        lessonId: sections[0].lessons[0]._id,
+      }
+    }
+
+    const section = await Section.findOne({ lessons: lastLesson.lessonId })
+
+    return {
+      lessonId: lastLesson.lessonId,
+      sectionId: section._id,
+    }
+  } catch (error) {
+    throw new Error('someting went wrong', error as Error)
   }
 }

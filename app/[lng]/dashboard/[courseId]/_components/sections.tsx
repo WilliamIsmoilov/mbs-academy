@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from 'react'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { completeLesson, unCompleteLesson } from '@/actions/course.action'
+import SectionLoading from '@/components/shared/section-loading'
 
 interface Props {
   sections: ISection[]
@@ -31,6 +32,7 @@ const Sections = ({ sections }: Props) => {
   const sectionId = searchParam.get('s')
   const router = useRouter()
   const pathname = usePathname()
+  const [mount, setMount] = useState(false)
 
   const onSelect = (text: string) => {
     const current = new URLSearchParams(Array.from(searchParam.entries()))
@@ -47,18 +49,31 @@ const Sections = ({ sections }: Props) => {
     router.push(`${pathname}${query}`)
   }
 
-  return (
+  useEffect(() => {
+    if (sectionId) {
+      setMount(true)
+    }
+  }, [sectionId])
+
+  return mount ? (
     <Accordion
       type='single'
       collapsible
       className='mt-1'
       defaultValue={sectionId!}
       onValueChange={onSelect}
+      value={sectionId!}
     >
       {sections.map(section => (
         <SectionList key={section._id} {...section} />
       ))}
     </Accordion>
+  ) : (
+    <div className='mt-4 flex flex-col space-y-2'>
+      {Array.from({ length: sections.length }).map((_, i) => (
+        <SectionLoading key={i} />
+      ))}
+    </div>
   )
 }
 
